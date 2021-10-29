@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import json
 from pprint import pprint
 
 from colorama import Fore, Back, Style
@@ -7,7 +6,6 @@ import readchar
 import argparse
 import random
 import string
-from time import time
 from collections import namedtuple
 from time import time, ctime
 
@@ -17,11 +15,10 @@ def test(stop_key, max_iteration, max_time_seconds):
 
     # Ask for all the entries and put them in a list
 
-    received = []    # Analtino
-    miss_duration=[] # Analtino
-    hit_duration = []# Analtino
-    Total_inputs = {}
-    number_of_hits = 0 # Analtino
+    miss_duration=[]    # Analtino
+    hit_duration = []   # Analtino
+    Total_inputs = {}   # Analtino
+    number_of_hits = 0  # Analtino
     number_of_types = 0 # Analtino
     pressed_keys = [] # empty list to start with
     list_input = []
@@ -30,68 +27,71 @@ def test(stop_key, max_iteration, max_time_seconds):
 
     t_global_start = time()
 
+    #Enquanto nenhuma das condiçooes de encerramento for cumprida
+    # o ciclo deve continuar
     while True:
 
         if max_time_seconds == 0:
             pass
+        #Se desde o inicio do programa já decorreu um temo maior
+        # que o predefinodo deve abortar "break" para sair do ciclo
         elif dur >= max_time_seconds:
             print('\nTEST ENDED! You achieved the time limit\n')
             break
 
-        test_start = ctime()  # Analtino
-        t_local_start = time()
-        letter = random.choice(string.ascii_lowercase)
+        letter = random.choice(string.ascii_lowercase)            # Gera uma letra aleatoria
+        #Apresentar a primeira letra que o utilizador deve inserir
         print('Type ' + Fore.LIGHTBLUE_EX + str(letter) + Style.RESET_ALL + ' or space to stop: ')
-        pressed_key = readchar.readchar()
+        test_start = ctime()                                       #Guarda a data de inicio
+        t_local_start = time()                                     #inicia um temporizador
+        pressed_key = readchar.readchar()                          #Guarda o caracter inserido pelo utilizador
         iteration += 1
 
-        if pressed_key == stop_key:
+        if pressed_key == stop_key:                                #Se o caracter inserido for igual a chave para parar
             print('\nTEST ENDED! You pressed space.\n')
-            break
+            break                                                  #Sai do ciclo
         else:
-            pressed_keys.append(pressed_key)
+            pressed_keys.append(pressed_key)                       #Guardar o caracter inserido num Dicionario
+            t_local_end = time()                                   # Fim do temporizador
+            test_end = ctime()                                     # Guarda a data de fim
 
-            if pressed_key == letter:
-                t_local_end = time()
+            if pressed_key == letter:                              #Se o caracter inserido for igual a chave para parar
                 print('You pressed ' + Fore.GREEN + str(pressed_key) + Style.RESET_ALL + ' so your answer is CORRECT!')
-                test_end = ctime()  # Analtino
-                number_of_hits += 1  # Analtino
-                number_of_types += 1  # Analtino
-                received.append(pressed_key)  # Analtino
-                hit_duration.append(t_local_end - t_local_start)  # Analtino
+                number_of_hits += 1  # numero de letras acertadas
+                number_of_types += 1 # numero de letras inseridas
+                hit_duration.append(t_local_end - t_local_start)  # Guarda o tempo que o utilizador levou para acertar
             else:
-                t_local_end = time()
                 print('You pressed ' + Fore.RED + str(pressed_key) + Style.RESET_ALL + ' so your answer is INCORRECT!')
-                test_end = ctime()  # Analtino
-                number_of_types += 1  # Analtino
-                received.append(pressed_key)  # Analtino
-                miss_duration.append(t_local_end - t_local_start)  # Analtino
+                number_of_types += 1  # numero de letras inseridas
+                miss_duration.append(t_local_end - t_local_start)  # Guarda o tempo que o utilizador levou mas falhou
 
-        if iteration == max_iteration:
+        if iteration == max_iteration:                              #Se o numero de caracteres inseridos for igual ao
+                                                                    # valor maximo predifinido
             print('\nTEST ENDED! You achieved the maximum iteration\n')
-            break
+            break                                                   #Sai do ciclo
 
-        t_local_end = time()
+        t_local_end = time()  # Fim do temporizador
 
-        input_duration = t_local_end - t_local_start
+        input_duration = t_local_end - t_local_start                # Guarda o tempo que o utilizador levou mas falho
 
-        dur += input_duration
+        dur += input_duration                                       #Fazer o somatorio dos tempos despendidos
 
-        Tuple = Input(requested = letter, received = pressed_key, duration = input_duration)
-        list_input.append(Tuple)
+        #Com base no nameTupple criado inicialmente de nome "Input" criar um elemento da classe e adicionar a lista
+        Tuple = Input(str(letter), str(pressed_key), str(input_duration))
+        list_input.append(Tuple)                                   # Adicionar a Lista "list_input"
 
     t_global_end = time()
     test_duration = t_global_end - t_global_start
     test_hit_duration = 0
     test_miss_duration = 0
 
-    for x in range(len(hit_duration)):
+    for x in range(len(hit_duration)):                             #usar o tamanho da lista como valor maximo do ciclo
         test_hit_duration += hit_duration[x]
 
-    for x in range(len(miss_duration)):
+    for x in range(len(miss_duration)):                            #usar o tamanho da lista como valor maximo do ciclo
         test_miss_duration += miss_duration[x]
 
-    accuracy = (number_of_hits / number_of_types) * 100
+    accuracy = (number_of_hits / number_of_types) * 100           # Percentagem de acertos
 
     type_average_duration = test_duration / max_iteration
     type_hit_average_duration = test_hit_duration / number_of_hits
@@ -108,18 +108,12 @@ def test(stop_key, max_iteration, max_time_seconds):
     'type_miss_average_duration': type_miss_average_duration
     })
 
-    print('The keys you pressed are: ' + str(pressed_keys))
+    pprint(Total_inputs)
 
-    print('\nList of inputs is:\n')
-    for i in list_input:
-        print(str(i))
-
-    # print('\nTest duration: ' + str(test_duration) + 's')
-    pprint(json.dumps(Total_inputs, sort_keys=True, indent=2))
 def main():
 
     parser = argparse.ArgumentParser(description='PSR - TP1')
-    # parser.add_argument('--h', action='store_true', help='Print help message')
+
     parser.add_argument('--mv', type=int, help='Maximum number of iterations')
     parser.add_argument('--utm', type=int, help='Number of seconds for the test', default=0)
     args = vars(parser.parse_args())
