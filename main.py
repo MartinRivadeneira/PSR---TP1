@@ -134,11 +134,7 @@ def main():
     pressed_key = readchar.readchar()  # Guarda o caracter inserido pelo utilizador
 
     if pressed_key == 's':
-        print("Starting test in " + Fore.RED + '\n3')
-        sleep(1)
-        print('2')
-        sleep(1)
-        print('1' + Style.RESET_ALL)
+        print("Starting Test")
         sleep(1)
 
         test(' ', max_iteration, max_time_seconds)
