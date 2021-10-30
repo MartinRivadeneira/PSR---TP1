@@ -122,15 +122,15 @@ def test(stop_key, max_iteration, max_time_seconds):
 def main():
     parser = argparse.ArgumentParser(description='PSR - TP1')
 
-    parser.add_argument('--mv', type=int, help='Maximum number of iterations')
-    parser.add_argument('--utm', type=int, help='Number of seconds for the test', default=0)
+    parser.add_argument('-mv', '--max_value', type=int, help='Maximum number of iterations')
+    parser.add_argument('-utm', '--use_time_mode', type=int, help='Number of seconds for the test', default=0)
     args = vars(parser.parse_args())
     print(args)
 
-    max_iteration = args['mv']
-    max_time_seconds = args['utm']
+    max_iteration = args['max_value']
+    max_time_seconds = args['use_time_mode']
 
-    print('Press "s" to start the test')
+    print('Press ' + Fore.LIGHTBLUE_EX + 's' + Style.RESET_ALL + ' to start the test or anything else to quit')
     pressed_key = readchar.readchar()  # Guarda o caracter inserido pelo utilizador
 
     if pressed_key == 's':
