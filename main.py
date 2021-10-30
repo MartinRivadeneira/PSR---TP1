@@ -91,13 +91,21 @@ def test(stop_key, max_iteration, max_time_seconds):
     for x in range(len(miss_duration)):                            #usar o tamanho da lista como valor maximo do ciclo
         test_miss_duration += miss_duration[x]
 
-    accuracy = (number_of_hits / number_of_types) * 100           # Percentagem de acertos
+    if number_of_hits != 0:
+       accuracy = (number_of_hits / number_of_types) * 100           # Percentagem de acertos
+       type_hit_average_duration = test_hit_duration / number_of_hits
+    else:
+       accuracy = 0
+       type_hit_average_duration = 0
 
-    type_average_duration = test_duration / max_iteration
-    type_hit_average_duration = test_hit_duration / number_of_hits
-    type_miss_average_duration = test_miss_duration / (number_of_types - number_of_hits)
+    if test_miss_duration != 0:
+       type_miss_average_duration = test_miss_duration / (number_of_types - number_of_hits)
+    else:
+       type_miss_average_duration = 0
 
-    Total_inputs.update({'accuracy': accuracy, 'inputs': str(list_input),
+    type_average_duration = test_duration /iteration
+
+    Total_inputs.update({'accuracy': accuracy, 'inputs': list_input,
     'number_of_hits': number_of_hits,
     'number_of_types': number_of_types,
      'test_duration': test_duration,
