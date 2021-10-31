@@ -132,14 +132,13 @@ def main():
     max_iteration = args['max_value']
     max_time_seconds = args['use_time_mode']
 
-    print('Press ' + Fore.LIGHTBLUE_EX + 's' + Style.RESET_ALL + ' to start the test or anything else to quit')
+    print('Press any key to start the test')
     pressed_key = readchar.readchar()  # Guarda o caracter inserido pelo utilizador
 
-    if pressed_key == 's':
-        print("Starting Test")
-        sleep(1)
+    print("Starting Test")
+    sleep(1)
 
-        test(' ', max_iteration, max_time_seconds)
+    test(' ', max_iteration, max_time_seconds)
 
 
 if __name__ == "__main__":
