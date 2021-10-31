@@ -65,11 +65,6 @@ def test(stop_key, max_iteration, max_time_seconds):
                 number_of_types += 1  # numero de letras inseridas
                 miss_duration.append(t_local_end - t_local_start)  # Guarda o tempo que o utilizador levou mas falhou
 
-        if iteration == max_iteration:  # Se o numero de caracteres inseridos for igual ao
-            # valor maximo predifinido
-            print('\nTEST ENDED! You achieved the maximum iteration\n')
-            break  # Sai do ciclo
-
         t_local_end = time()  # Fim do temporizador
 
         input_duration = t_local_end - t_local_start  # Guarda o tempo que o utilizador levou mas falho
@@ -79,6 +74,13 @@ def test(stop_key, max_iteration, max_time_seconds):
         # Com base no nameTupple criado inicialmente de nome "Input" criar um elemento da classe e adicionar a lista
         Tuple = Input(str(letter), str(pressed_key), str(input_duration))
         list_input.append(Tuple)  # Adicionar a Lista "list_input"
+
+
+        if iteration == max_iteration:  # Se o numero de caracteres inseridos for igual ao
+            # valor maximo predifinido
+            print('\nTEST ENDED! You achieved the maximum iteration\n')
+            break  # Sai do ciclo
+
 
     t_global_end = time()
     test_duration = t_global_end - t_global_start
