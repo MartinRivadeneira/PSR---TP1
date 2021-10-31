@@ -132,7 +132,7 @@ def main():
     max_iteration = args['max_value']
     max_time_seconds = args['use_time_mode']
 
-    print('Press any key to start the test')
+    print('Press any key to start')
     pressed_key = readchar.readchar()  # Guarda o caracter inserido pelo utilizador
 
     print("Starting Test")
