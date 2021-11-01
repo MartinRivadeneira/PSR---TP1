@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
+from pprint import pprint
+
+from colorama import Fore, Back, Style
+import readchar
 import argparse
 import random
-import readchar
-import select
 import string
-import sys
 from collections import namedtuple
-from colorama import Fore, Back, Style
-from pprint import pprint
 from time import time, ctime, sleep
+import interruptingcow
+import timout
 
 Input = namedtuple('Input', ['requested', 'received', 'duration'])
 
@@ -27,11 +28,7 @@ def test(stop_key, max_iteration, max_time_seconds):
     dur = 0;
 
     t_global_start = time()
-
-    # Enquanto nenhuma das condiçooes de encerramento for cumprida
-    # o ciclo deve continuar
-
-    # Verificar se estamos ou não no modo tempo limitado
+    #verificar o modo tempo o quantidade
     if max_time_seconds == 0:
         while True:
             letter = random.choice(string.ascii_lowercase)  # Gera uma letra aleatoria
@@ -62,61 +59,57 @@ def test(stop_key, max_iteration, max_time_seconds):
 
             t_local_end = time()  # Fim do temporizador
             input_duration = t_local_end - t_local_start  # Guarda o tempo que o utilizador levou mas falho
-            # dur += input_duration  # Fazer o somatorio dos tempos despendidos
 
             # Com base no nameTupple criado inicialmente de nome "Input" criar um elemento da classe e adicionar a lista
             Tuple = Input(str(letter), str(pressed_key), str(input_duration))
             list_input.append(Tuple)  # Adicionar a Lista "list_input"
 
+
             if iteration == max_iteration:  # Se o numero de caracteres inseridos for igual ao
                 # valor maximo predifinido
                 print('\nTEST ENDED! You achieved the maximum iteration\n')
                 break  # Sai do ciclo
-
     else:
-        time_limit = max_time_seconds
-        while True:
-            time_limit = time_limit - dur
-            letter = random.choice(string.ascii_lowercase)  # Gera uma letra aleatoria
-            # Apresentar a primeira letra que o utilizador deve inserir
-            print('Type ' + Fore.LIGHTBLUE_EX + str(letter) + Style.RESET_ALL + ' or space to stop: ')
-            test_start = ctime()  # Guarda a data de inicio
-            t_local_start = time()  # inicia um temporizador
+        try:
+            with timeout(max_time_seconds, exception=RuntimeError):
+                while True:
+                    letter = random.choice(string.ascii_lowercase)  # Gera uma letra aleatoria
+                    # Apresentar a primeira letra que o utilizador deve inserir
+                    print('Type ' + Fore.LIGHTBLUE_EX + str(letter) + Style.RESET_ALL + ' or space to stop: ')
+                    test_start = ctime()  # Guarda a data de inicio
+                    t_local_start = time()  # inicia um temporizador
+                    pressed_key = readchar.readchar()  # Guarda o caracter inserido pelo utilizador
+                    iteration += 1
 
-            # Espera uma entrada do teclado, com time out definido
-            i, o, e = select.select( [sys.stdin], [], [], time_limit)
-
-            if i:
-                pressed_key = sys.stdin.readline().strip()
-                print(pressed_key)
-                if pressed_key == stop_key:  # Se o caracter inserido for igual a chave para parar
-                    print('\nTEST ENDED! You pressed space.\n')
-                    break  # Sai do ciclo
-                else:
-                    pressed_keys.append(pressed_key)  # Guardar o caracter inserido num Dicionario
-                    t_local_end = time()  # Fim do temporizador
-                    test_end = ctime()  # Guarda a data de fim
-
-                    if pressed_key == letter:  # Se o caracter inserido for igual a chave para parar
-                        print('You pressed ' + Fore.GREEN + str(pressed_key) + Style.RESET_ALL + ' so your answer is CORRECT!')
-                        number_of_hits += 1  # numero de letras acertadas
-                        number_of_types += 1  # numero de letras inseridas
-                        hit_duration.append(t_local_end - t_local_start)  # Guarda o tempo que o utilizador levou para acertar
+                    if pressed_key == stop_key:  # Se o caracter inserido for igual a chave para parar
+                        print('\nTEST ENDED! You pressed space.\n')
+                        break  # Sai do ciclo
                     else:
-                        print('You pressed ' + Fore.RED + str(pressed_key) + Style.RESET_ALL + ' so your answer is INCORRECT!')
-                        number_of_types += 1  # numero de letras inseridas
-                        miss_duration.append(t_local_end - t_local_start)  # Guarda o tempo que o utilizador levou mas falhou
+                        pressed_keys.append(pressed_key)  # Guardar o caracter inserido num Dicionario
+                        t_local_end = time()  # Fim do temporizador
+                        test_end = ctime()  # Guarda a data de fim
 
-                t_local_end = time()  # Fim do temporizador
-                input_duration = t_local_end - t_local_start  # Guarda o tempo que o utilizador levou mas falho
-                dur += input_duration  # Fazer o somatorio dos tempos despendidos
+                        if pressed_key == letter:  # Se o caracter inserido for igual a chave para parar
+                            print('You pressed ' + Fore.GREEN + str(pressed_key) + Style.RESET_ALL + ' so your answer is CORRECT!')
+                            number_of_hits += 1  # numero de letras acertadas
+                            number_of_types += 1  # numero de letras inseridas
+                            hit_duration.append(t_local_end - t_local_start)  # Guarda o tempo que o utilizador levou para acertar
+                        else:
+                            print('You pressed ' + Fore.RED + str(pressed_key) + Style.RESET_ALL + ' so your answer is INCORRECT!')
+                            number_of_types += 1  # numero de letras inseridas
+                            miss_duration.append(t_local_end - t_local_start)  # Guarda o tempo que o utilizador levou mas falhou
 
-                # Com base no nameTupple criado inicialmente de nome "Input" criar um elemento da classe e adicionar a lista
-                Tuple = Input(str(letter), str(pressed_key), str(input_duration))
-                list_input.append(Tuple)  # Adicionar a Lista "list_input"
-            else:
-                print('\nTEST ENDED! You achieved the time limit\n')
-                break
+                    t_local_end = time()  # Fim do temporizador
+                    input_duration = t_local_end - t_local_start  # Guarda o tempo que o utilizador levou mas falho
+
+                    # Com base no nameTupple criado inicialmente de nome "Input" criar um elemento da classe e adicionar a lista
+                    Tuple = Input(str(letter), str(pressed_key), str(input_duration))
+                    list_input.append(Tuple)  # Adicionar a Lista "list_input"
+        except RuntimeError:
+            print('\nTEST ENDED! You achieved the time limit\n')
+            pass
+
+        # while time() < (t_global_start + max_time_seconds):
 
     t_global_end = time()
     test_duration = t_global_end - t_global_start
