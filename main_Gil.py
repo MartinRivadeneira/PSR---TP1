@@ -8,8 +8,7 @@ import random
 import string
 from collections import namedtuple
 from time import time, ctime, sleep
-import interruptingcow
-import timout
+from interruptingcow import timeout
 
 Input = namedtuple('Input', ['requested', 'received', 'duration'])
 
@@ -108,8 +107,6 @@ def test(stop_key, max_iteration, max_time_seconds):
         except RuntimeError:
             print('\nTEST ENDED! You achieved the time limit\n')
             pass
-
-        # while time() < (t_global_start + max_time_seconds):
 
     t_global_end = time()
     test_duration = t_global_end - t_global_start
