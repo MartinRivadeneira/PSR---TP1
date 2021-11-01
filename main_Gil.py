@@ -131,9 +131,13 @@ def test(stop_key, max_iteration, max_time_seconds):
     else:
         type_miss_average_duration = 0
 
-    type_average_duration = test_duration / iteration
+    try:
+        type_average_duration = test_duration / iteration
+    except:
+        pass
 
-    Total_inputs.update({'accuracy': accuracy, 'inputs': list_input,
+    try:
+        Total_inputs.update({'accuracy': accuracy, 'inputs': list_input,
                          'number_of_hits': number_of_hits,
                          'number_of_types': number_of_types,
                          'test_duration': test_duration,
@@ -143,8 +147,9 @@ def test(stop_key, max_iteration, max_time_seconds):
                          'type_hit_average_duration': type_hit_average_duration,
                          'type_miss_average_duration': type_miss_average_duration
                          })
-
-    pprint(Total_inputs)
+        pprint(Total_inputs)
+    except:
+        print ('\nYou have not pressed any key in time! Better luck next time!')
 
 
 def main():
