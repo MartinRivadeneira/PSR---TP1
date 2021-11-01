@@ -149,7 +149,7 @@ def test(stop_key, max_iteration, max_time_seconds):
                          })
         pprint(Total_inputs)
     except:
-        print ('\nYou have no stats because you have not pressed any key in time! Better luck next time!\n')
+        print ('\nAn error as ocurred while trying to show your stats...\n')
 
 
 def main():
