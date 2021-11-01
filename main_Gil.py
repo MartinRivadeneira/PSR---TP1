@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+
+# $ pip install interruptingcow
+
+
 from pprint import pprint
 
 from colorama import Fore, Back, Style
@@ -24,7 +28,6 @@ def test(stop_key, max_iteration, max_time_seconds):
     pressed_keys = []  # empty list to start with
     list_input = []
     iteration = 0
-    dur = 0;
 
     t_global_start = time()
     #verificar o modo tempo o quantidade
@@ -166,8 +169,13 @@ def main():
     print('Press any key to start')
     pressed_key = readchar.readchar()  # Guarda o caracter inserido pelo utilizador
 
-    print("Starting Test")
+    print("\nStarting Test in 3\n")
     sleep(1)
+    print("Starting Test in 2\n")
+    sleep(1)
+    print("Starting Test in 1\n")
+    sleep(1)
+    print("GO!!!\n")
 
     test(' ', max_iteration, max_time_seconds)
 

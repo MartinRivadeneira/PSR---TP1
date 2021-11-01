@@ -135,8 +135,13 @@ def main():
     print('Press any key to start')
     pressed_key = readchar.readchar()  # Guarda o caracter inserido pelo utilizador
 
-    print("Starting Test")
+    print("\nStarting Test in 3\n")
     sleep(1)
+    print("Starting Test in 2\n")
+    sleep(1)
+    print("Starting Test in 1\n")
+    sleep(1)
+    print("GO!!!\n")
 
     test(' ', max_iteration, max_time_seconds)
 
